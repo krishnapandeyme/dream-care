@@ -29,14 +29,14 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(self, mobile, password, role="ADMIN"):
+    def create_superuser(self, username, mobile, password, role="ADMIN"):
         """
         Create and return a `User` with superuser (admin) permissions.
         """
         if password is None:
             raise TypeError('Superusers must have a password.')
 
-        user = self.model(username=mobile, mobile=mobile, role=role)
+        user = self.model(username=username, mobile=mobile, role=role)
         user.set_password(password)
         user.is_superuser = True
         user.is_staff = True
