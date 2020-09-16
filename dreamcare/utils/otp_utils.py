@@ -21,9 +21,9 @@ def send_otp(user):
         'mobile': mobile,
         'otp': otp
     }
-    otp_token = encode(payload)
     res = requests.get(SMS_API_URL.format(otp, mobile[3:]))
     if res.status_code == 200:
+        otp_token = encode(payload)
         return otp, otp_token
     else:
         return None, None
