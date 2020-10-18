@@ -19,4 +19,6 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('dreamcare.apps.accounts.urls', namespace='accounts')),
+    path('service/', include('dreamcare.apps.service.urls', namespace='service')),
+    path('myadmin/', include('dreamcare.apps.myadmin.urls', namespace='myadmin')),
 ]
