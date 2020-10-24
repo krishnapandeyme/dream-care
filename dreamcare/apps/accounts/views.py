@@ -58,16 +58,22 @@ class CheckInAPIView(APIView):
     def post(self, request):
         user = request.data.get('user', {})
         serializer = self.serializer_class(data=user)
-        serializer.is_valid(raise_exception=True)
-        otp, otp_token = send_otp(user)
-        if otp_token:
-            response = {
-                "otp": otp,
-                "otp_token": otp_token
-            }
-            return Response(response, status=status.HTTP_200_OK)
+        print('+++++++++here')
+        if serializer.is_valid() or "user with this mobile already exists." in serializer.errors.get("mobile", []):
+            otp, otp_token = send_otp(user)
+            if otp_token:
+                response = {
+                    "otp": otp,
+                    "otp_token": otp_token
+                }
+                return Response(response, status=status.HTTP_200_OK)
+            else:
+                response = {
+                    "detail": "Couldn't process the request"
+                }
+                return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             response = {
-                "detail": "Couldn't process the request"
+                "detail": serializer.errors
             }
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
